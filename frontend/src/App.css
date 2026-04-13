@@ -1,12 +1,26 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* ================== TRAVA DE SCROLL GLOBAL ================== */
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Proíbe o navegador do celular de rolar a página inteira */
+  position: fixed; /* Evita pulos visuais no iOS */
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
 .app-container { 
   display: flex; 
   flex-direction: column;
-  height: 100vh; 
+  height: 100dvh; /* dvh se adapta perfeitamente à barra do navegador mobile */
   width: 100vw; 
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
   background-color: #f1f5f9; /* Fundo cinza claro no PC */
+  overflow: hidden;
 }
 
 /* ================== NAVBAR GLOBAL ================== */
@@ -32,7 +46,7 @@
   flex-grow: 1;
   overflow: hidden;
   position: relative;
-  padding: 20px; /* Os espacinhos que você gostou */
+  padding: 20px; 
   gap: 20px;
 }
 
@@ -43,11 +57,15 @@
   z-index: 10; 
   display: flex; 
   flex-direction: column; 
-  border-radius: 12px; /* Arredondado no PC */
-  overflow: hidden;
+  border-radius: 12px; 
+  overflow-y: auto; /* SCROLL MOVIDO PRA CÁ: a barra lateral inteira rola agora */
 }
 
-.filtros-container { padding: 15px 20px; border-bottom: 1px solid #eee; }
+.filtros-container { 
+  padding: 15px 20px; 
+  border-bottom: 1px solid #eee; 
+  flex-shrink: 0; /* Impede que o campo de busca seja esmagado ao rolar */
+}
 .search-input { width: 100%; padding: 12px 15px; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 15px; }
 
 /* ================== CHIPS EXATAMENTE COMO ERAM ANTES ================== */
@@ -58,7 +76,13 @@
 .chip-limpar { border: none; background: #ffebee; color: #c62828; padding: 4px 8px; border-radius: 5px; font-size: 0.7rem; cursor: pointer; }
 
 /* ================== CARDS E BADGES ================== */
-.lista-locais { flex-grow: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 12px; }
+.lista-locais { 
+  /* overflow removido daqui para deixar o filho livre */
+  padding: 15px; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 12px; 
+}
 
 .local-card { background: white; border-radius: 10px; padding: 15px; border: 1px solid #eee; }
 .card-header { display: flex; justify-content: space-between; margin-bottom: 5px; }
@@ -83,60 +107,4 @@
 .btn-minha-localizacao { background-color: white; border: none; border-radius: 4px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px; cursor: pointer; margin-top: 10px; margin-right: 10px; transition: background-color 0.2s; }
 .btn-minha-localizacao:hover { background-color: #f1f1f1; }
 
-/* ================== MOBILE (PERFEITO) ================== */
-@media (max-width: 768px) {
-  .global-header { padding: 0 15px; height: 60px; }
-  .logo-area h1 { font-size: 1.1rem; }
-  .logo-area p { display: none; }
-
-  /* Tira os espacinhos no celular para o mapa ocupar tudo */
-  .main-content { padding: 0; gap: 0; }
-  .map-container { border-radius: 0; }
-
-  .sidebar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: calc(100vh - 60px);
-    transform: translateY(100%);
-    transition: transform 0.3s ease-in-out;
-    z-index: 150;
-    border-radius: 15px 15px 0 0; /* Arredonda só em cima */
-  }
-  .sidebar.aberto { transform: translateY(0); }
-
-  .btn-abrir-menu {
-    display: block;
-    position: absolute;
-    bottom: 25px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 50;
-    background: #3b5998;
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 30px;
-    font-weight: bold;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  }
-  
-  .btn-fechar-menu { font-size: 1.5rem; background: none; border: none; color: #333; cursor: pointer;}
-}
-
-/* ================== MODAL DE CADASTRO ================== */
-.modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.6); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px;}
-.modal-content { background: white; width: 100%; max-width: 500px; border-radius: 12px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
-.modal-content h2 { margin-bottom: 20px; color: #3b5998; font-size: 1.4rem; }
-.form-group { margin-bottom: 15px; }
-.form-group label { display: block; font-size: 0.85rem; font-weight: bold; color: #555; margin-bottom: 5px; }
-.form-input, .form-select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.95rem; }
-.checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-.checkbox-item { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer; }
-.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px; }
-.btn-cancelar { padding: 10px 20px; border: none; background: #f1f5f9; color: #64748b; border-radius: 6px; cursor: pointer; font-weight: bold; }
-.btn-salvar { padding: 10px 20px; border: none; background: #3b5998; color: white; border-radius: 6px; cursor: pointer; font-weight: bold; }
-.btn-salvar:hover { background: #2a4374; }
-.btn-novo-local { background: #22c55e; color: white; border: none; padding: 8px 15px; border-radius: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: 0.2s; }
-.btn-novo-local:hover { background: #16a34a; transform: scale(1.05); }
+/* ==================
