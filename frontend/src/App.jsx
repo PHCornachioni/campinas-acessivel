@@ -80,27 +80,72 @@ function AuthModal({ setModalAberto }) {
     }
   };
 
-  return (
+return (
     <div className="modal-overlay">
       <div className="modal-content auth-modal">
         <h2>{isSignUp ? 'Criar Nova Conta' : 'Acesso da Administração'}</h2>
+        
         <form onSubmit={handleAuth}>
+          {/* Campo de E-mail */}
           <div className="form-group">
-            <label>E-mail</label>
-            <input type="email" required className="form-input" value={email} onChange={e => setEmail(e.target.value)} />
+            <label htmlFor="auth-email">E-mail</label>
+            <input 
+              type="email" 
+              id="auth-email"
+              name="email"
+              required 
+              className="form-input" 
+              value={email} 
+              onChange={e => setEmail(e.target.value)} 
+            />
           </div>
+
+          {/* Campo de Senha */}
           <div className="form-group">
-            <label>Senha</label>
-            <input type="password" required className="form-input" value={password} onChange={e => setPassword(e.target.value)} />
+            <label htmlFor="auth-password">Senha</label>
+            <input 
+              type="password" 
+              id="auth-password"
+              name="password"
+              required 
+              className="form-input" 
+              value={password} 
+              onChange={e => setPassword(e.target.value)} 
+            />
           </div>
+
           <button type="submit" className="btn-salvar" disabled={loading}>
             {loading ? 'Carregando...' : (isSignUp ? 'Cadastrar' : 'Entrar')}
           </button>
         </form>
-        <p onClick={() => setIsSignUp(!isSignUp)} style={{ cursor: 'pointer', textAlign: 'center', marginTop: '15px', fontSize: '0.9rem', color: '#3b5998' }}>
+
+        {/* Transformado em botão sem borda para 100% de Acessibilidade via Teclado */}
+        <button 
+          type="button"
+          onClick={() => setIsSignUp(!isSignUp)} 
+          style={{ 
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer', 
+            textAlign: 'center', 
+            marginTop: '15px', 
+            fontSize: '0.9rem', 
+            color: '#3b5998',
+            width: '100%',
+            fontFamily: 'inherit'
+          }}
+        >
           {isSignUp ? 'Já tem uma conta? Clique aqui para entrar.' : 'Não tem conta? Crie uma agora para avaliar o sistema.'}
-        </p>
-        <button className="btn-cancelar" onClick={() => setModalAberto(false)} style={{ width: '100%', marginTop: '10px' }}>Cancelar</button>
+        </button>
+
+        <button 
+          type="button" 
+          className="btn-cancelar" 
+          onClick={() => setModalAberto(false)} 
+          style={{ width: '100%', marginTop: '10px' }}
+        >
+          Cancelar
+        </button>
       </div>
     </div>
   );
@@ -232,7 +277,7 @@ function PainelMapa() {
   };
 
   const carregarLocais = () => {
-    fetch('${import.meta.env.VITE_API_URL}/api/locais')
+    fetch(`${import.meta.env.VITE_API_URL}/api/locais`)
       .then(r => r.json())
       .then(d => setLocais(d))
       .catch(e => console.error(e));
@@ -272,7 +317,7 @@ function PainelMapa() {
 
   const salvarLocal = async (e) => {
     e.preventDefault();
-    const url = modoEdicao ? '${import.meta.env.VITE_API_URL}/api/locais/${novoLocal.id}' : '${import.meta.env.VITE_API_URL}/api/locais';
+    const url = modoEdicao ? `${import.meta.env.VITE_API_URL}/api/locais/${novoLocal.id}` : `${import.meta.env.VITE_API_URL}/api/locais`;
     const metodo = modoEdicao ? 'PUT' : 'POST';
     
     try {
@@ -291,7 +336,7 @@ function PainelMapa() {
   const excluirLocal = async (id) => {
     if (!window.confirm("Tem certeza que deseja excluir este local?")) return;
     try {
-      const resposta = await fetch('${import.meta.env.VITE_API_URL}/api/locais/${id}', { method: 'DELETE' });
+      const resposta = await fetch(`${import.meta.env.VITE_API_URL}/api/locais/${id}`, { method: 'DELETE' });
       if (resposta.ok) { 
         alert("Local excluído!"); 
         setLocalSelecionado(null); 
