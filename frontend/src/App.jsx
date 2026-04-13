@@ -232,7 +232,7 @@ function PainelMapa() {
   };
 
   const carregarLocais = () => {
-    fetch('http://localhost:3000/api/locais')
+    fetch('${import.meta.env.VITE_API_URL}/api/locais')
       .then(r => r.json())
       .then(d => setLocais(d))
       .catch(e => console.error(e));
@@ -272,7 +272,7 @@ function PainelMapa() {
 
   const salvarLocal = async (e) => {
     e.preventDefault();
-    const url = modoEdicao ? `http://localhost:3000/api/locais/${novoLocal.id}` : 'http://localhost:3000/api/locais';
+    const url = modoEdicao ? '${import.meta.env.VITE_API_URL}/api/locais/${novoLocal.id}' : '${import.meta.env.VITE_API_URL}/api/locais';
     const metodo = modoEdicao ? 'PUT' : 'POST';
     
     try {
@@ -291,7 +291,7 @@ function PainelMapa() {
   const excluirLocal = async (id) => {
     if (!window.confirm("Tem certeza que deseja excluir este local?")) return;
     try {
-      const resposta = await fetch(`http://localhost:3000/api/locais/${id}`, { method: 'DELETE' });
+      const resposta = await fetch('${import.meta.env.VITE_API_URL}/api/locais/${id}', { method: 'DELETE' });
       if (resposta.ok) { 
         alert("Local excluído!"); 
         setLocalSelecionado(null); 
