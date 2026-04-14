@@ -37,8 +37,31 @@ html, body {
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-.logo-area h1 { font-size: 1.3rem; margin: 0; }
-.logo-area p { font-size: 0.8rem; opacity: 0.8; margin: 0; }
+/* ================== NOVO ESTILO DA LOGO ================== */
+.logo-area { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+}
+.logo-icon { 
+  background-color: white; 
+  color: #3b5998; 
+  width: 42px; 
+  height: 42px; 
+  border-radius: 10px; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  flex-shrink: 0; 
+}
+.logo-icon svg { 
+  width: 26px; 
+  height: 26px; 
+  fill: currentColor; 
+}
+.logo-text { display: flex; flex-direction: column; }
+.logo-text h1 { font-size: 1.3rem; margin: 0; line-height: 1.1; }
+.logo-text p { font-size: 0.8rem; opacity: 0.9; margin: 0; }
 
 /* ================== CONTEÚDO PRINCIPAL (COM ESPACINHOS NO PC) ================== */
 .main-content {
@@ -107,11 +130,41 @@ html, body {
 .btn-minha-localizacao { background-color: white; border: none; border-radius: 4px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px; cursor: pointer; margin-top: 10px; margin-right: 10px; transition: background-color 0.2s; }
 .btn-minha-localizacao:hover { background-color: #f1f1f1; }
 
+/* ================== BOTÃO TOGGLE POI ================== */
+.btn-toggle-poi { 
+  background-color: white; /* Cor padrão (Mapa Limpo) */
+  border: none; 
+  border-radius: 4px; 
+  width: 40px; 
+  height: 40px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px; 
+  cursor: pointer; 
+  margin-right: 10px; /* Alinha com o de cima */
+  transition: all 0.2s; 
+  font-size: 1.1rem; /* Tamanho do ícone emoji */
+}
+
+/* Efeito Hover */
+.btn-toggle-poi:hover { background-color: #f1f1f1; }
+
+/* Efeito Ativo (Quando os POIs estão visíveis - ON) */
+.btn-toggle-poi.ativo {
+  background-color: #e0f2fe; /* Um azul clarinho sutil */
+  box-shadow: rgba(3, 105, 161, 0.4) 0px 1px 6px 0px; /* Sombra azulada */
+}
+
 /* ================== MOBILE (PERFEITO) ================== */
 @media (max-width: 768px) {
   .global-header { padding: 0 15px; height: 60px; }
-  .logo-area h1 { font-size: 1.1rem; }
-  .logo-area p { display: none; }
+  .logo-area h1 { font-size: 1rem; } /* Diminui um tiquinho o título para dar espaço */
+    .logo-area p { 
+    display: block; /* Isso aqui ressuscita a frase! */
+    font-size: 0.65rem; /* Deixa miudinha para caber certinho */
+    margin-top: 2px;
+  }
 
   /* Tira os espacinhos no celular para o mapa ocupar tudo */
   .main-content { padding: 0; gap: 0; }
@@ -146,7 +199,25 @@ html, body {
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   }
   
-  .btn-fechar-menu { font-size: 1.5rem; background: none; border: none; color: #333; cursor: pointer;}
+  .btn-fechar-menu {
+    position: fixed;
+    bottom: 25px; /* Mesma altura do botão de abrir */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 160; /* Fica acima do menu aberto */
+    background: #3b5998;
+    color: white;
+    border: 3px solid white; /* Borda branca para dar um destaque elegante */
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    cursor: pointer;
+  }
 }
 
 /* ================== MODAL DE CADASTRO ================== */

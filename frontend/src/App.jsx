@@ -249,6 +249,7 @@ function PainelMapa() {
   const [modalAberto, setModalAberto] = useState(false);
   const [modoEdicao, setModoEdicao] = useState(false);
   const [authModalAberto, setAuthModalAberto] = useState(false);
+  const [poiVisivel, setPoiVisivel] = useState(false); // Inicia como FALSO (Mapa Limpo)
 
   // O estado de segurança oficial do seu aplicativo
   const [session, setSession] = useState(null); 
@@ -286,6 +287,7 @@ function PainelMapa() {
   useEffect(() => { carregarLocais(); }, []);
 
   const toggleCategoria = (cat) => setCategoriasAtivas(prev => prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]);
+  const togglePOIsPadroes = () => setPoiVisivel(prev => !prev);
   const toggleAcesso = (tipo) => setFiltrosAcesso(prev => ({ ...prev, [tipo]: !prev[tipo] }));
   const limparFiltros = () => { setTextoBusca(''); setCategoriasAtivas([]); setFiltrosAcesso({ fisica: false, visual: false, auditiva: false, intelectual: false }); };
 
@@ -359,34 +361,42 @@ function PainelMapa() {
     <div className="app-container">
       <header className="global-header">
         <div className="logo-area">
-          <h1>♿ Campinas Acessível</h1>
-          <p>Mapeamento Cultural</p>
+          <div className="logo-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="4" r="2" /> {/* <-- A cabeça chegou! */}
+              <path d="M19 13v-2c-1.54.02-3.09-.75-4.07-1.83l-1.29-1.43c-.17-.19-.38-.34-.61-.45-.01 0-.01-.01-.02-.01H13c-.35-.2-.75-.3-1.19-.26C10.76 7.11 10 8.04 10 9.09V15c0 1.1.9 2 2 2h5v5h2v-5.5c0-1.1-.9-2-2-2h-3v-3.45c1.29 1.07 3.25 1.94 5 1.95zm-6.17 5c-.41 1.16-1.52 2-2.83 2-1.66 0-3-1.34-3-3 0-1.31.84-2.41 2-2.83V12.1a5 5 0 105.9 5.9h-2.07z"/>
+            </svg>
+          </div>
+          <div className="logo-text">
+            <h1>Campinas Acessível</h1>
+            <p>Mapeamento Cultural</p>
+          </div>
         </div>
-        {/* LADO DIREITO DO CABEÇALHO (Agora em formato de coluna) */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '5px' }}>
-          
+
+        {/* LADO DIREITO DO CABEÇALHO (O botão de fechar saiu daqui) */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '5px', maxWidth: '50%' }}>
           {session ? (
             <>
-              {/* Linha 1: Os botões de ação */}
-              <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-                <button className="btn-novo-local" onClick={abrirCadastro}>+ Novo Local</button>
-                <button style={{background: 'none', border: 'none', color: '#ffb3b3', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem'}} onClick={handleLogout}>
+              <button className="btn-novo-local" onClick={abrirCadastro}>+ Novo Local</button>
+              
+              {/* E-mail truncado e botão de sair lado a lado */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{
+                  fontSize: '0.85rem', color: '#f8fafc', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px', display: 'inline-block'
+                }} title={session.user.email}>
+                  {session.user.email}
+                </span>
+                <span style={{color: '#94a3b8'}}>|</span>
+                <button onClick={handleLogout} style={{ background: 'none', border: 'none', color: '#ffb3b3', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.85rem', padding: 0 }}>
                   Sair
                 </button>
               </div>
-              
-              {/* Linha 2: O e-mail embaixo, um pouco menor e sutil */}
-              <span style={{fontSize: '0.8rem', color: '#f8fafc'}}>
-                Logado como: <b>{session.user.email}</b>
-              </span>
             </>
           ) : (
             <button style={{background: 'white', color: '#3b5998', border: 'none', padding: '8px 15px', borderRadius: '20px', fontWeight: 'bold', cursor: 'pointer'}} onClick={() => setAuthModalAberto(true)}>
               Login / Cadastro
             </button>
           )}
-
-          {menuAberto && <button className="btn-fechar-menu" onClick={() => setMenuAberto(false)}>✕</button>}
         </div>
       </header>
 
@@ -438,7 +448,16 @@ function PainelMapa() {
         </aside>
 
         <main className="map-container">
-          <Map center={posicaoMapa} zoom={zoomMapa} onCameraChanged={(ev) => { setPosicaoMapa(ev.detail.center); setZoomMapa(ev.detail.zoom); }} mapId="MAPA_CULTURAL_CAMPINAS">
+          <Map 
+            // A MÁGICA DO REACT: Mudar a 'key' força o mapa a recarregar com o novo ID
+            key={poiVisivel ? 'mapa-normal' : 'mapa-limpo'} 
+            center={posicaoMapa} 
+            zoom={zoomMapa} 
+            onCameraChanged={(ev) => { setPosicaoMapa(ev.detail.center); setZoomMapa(ev.detail.zoom); }} 
+            
+            // Alterna entre os seus IDs
+            mapId={poiVisivel ? import.meta.env.VITE_MAP_ID_NORMAL : import.meta.env.VITE_MAP_ID_LIMPO}
+          >
             
             {locaisFiltrados.map((local) => {
               const config = obterIconeMarcador(local.tipo);
@@ -458,12 +477,19 @@ function PainelMapa() {
                   <h3 style={{ fontSize: '1rem', color: '#333', marginBottom: '5px' }}>{localSelecionado.nome}</h3>
                   <p style={{ fontSize: '0.8rem', color: '#666', marginBottom: '10px' }}>📍 {localSelecionado.endereco}</p>
                   
+                  {/* NOVOS BADGES DIRETAMENTE NO POPUP */}
+                  <div className="acessibilidade-badges" style={{ marginBottom: '15px' }}>
+                    <span className={`badge ${localSelecionado.acessibilidade_fisica ? 'tem' : 'nao-tem'}`}>♿ Física</span>
+                    <span className={`badge ${localSelecionado.acessibilidade_visual ? 'tem' : 'nao-tem'}`}>👁️ Visual</span>
+                    <span className={`badge ${localSelecionado.acessibilidade_auditiva ? 'tem' : 'nao-tem'}`}>🦻 Auditiva</span>
+                    <span className={`badge ${localSelecionado.acessibilidade_intelectual ? 'tem' : 'nao-tem'}`}>🧠 Intelectual</span>
+                  </div>
+
                   <div className="acoes-popup">
                     <a href={`https://www.google.com/maps/dir/?api=1&destination=${localSelecionado.latitude},${localSelecionado.longitude}`} target="_blank" rel="noreferrer" className="btn-rota">
                       ↗ Rota
                     </a>
                     
-                    {/* AQUI ESTÁ A CORREÇÃO DE SEGURANÇA NO BALÃO */}
                     {session && (
                       <>
                         <button onClick={() => abrirEdicao(localSelecionado)} style={{background: '#f1f5f9', color: '#475569', border: '1px solid #cbd5e1', padding: '8px 12px', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'}} title="Editar Local">
@@ -474,7 +500,6 @@ function PainelMapa() {
                         </button>
                       </>
                     )}
-
                   </div>
                 </div>
               </InfoWindow>
@@ -482,12 +507,32 @@ function PainelMapa() {
           </Map>
           
           <MapControl position={ControlPosition.RIGHT_TOP}>
-            <button className="btn-minha-localizacao" onClick={irParaMinhaLocalizacao} title="Encontrar minha localização">
-              <span style={{ fontSize: '1.2rem' }}>📍</span>
-            </button>
+            {/* 4. --- CONTAINER PARA OS BOTÕES DIREITOS DO MAPA --- */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              
+              {/* Botão de Localização (Seu botão original, apenas tirei os margins pra dar gap no pai) */}
+              <button className="btn-minha-localizacao" onClick={irParaMinhaLocalizacao} title="Encontrar minha localização" style={{margin: 0}}>
+                <span style={{ fontSize: '1.2rem' }}>📍</span>
+              </button>
+
+              {/* 5. --- O NOVO BOTÃO TOGGLE POI --- */}
+              <button 
+                className={`btn-toggle-poi ${poiVisivel ? 'ativo' : ''}`} // Classe 'ativo' muda a cor
+                onClick={togglePOIsPadroes} 
+                title={poiVisivel ? "Esconder locais padrão do Google" : "Mostrar locais padrão do Google"}
+              >
+                {/* Ícone muda de acordo com o estado 🏛️ */}
+                {poiVisivel ? '🎯' : '🏛️'}
+              </button>
+            </div>
           </MapControl>
 
-          <button className="btn-abrir-menu" onClick={() => setMenuAberto(true)}>🔍 Filtros e Locais</button>
+          {/* O BOTÃO FLUTUANTE DE ABRIR/FECHAR MENU AGORA FICA AQUI */}
+          {!menuAberto ? (
+            <button className="btn-abrir-menu" onClick={() => setMenuAberto(true)}>🔍 Filtros e Locais</button>
+          ) : (
+            <button className="btn-fechar-menu" onClick={() => setMenuAberto(false)}>✕</button>
+          )}
         </main>
       </div>
 
