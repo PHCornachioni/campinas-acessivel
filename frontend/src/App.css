@@ -26,7 +26,8 @@ html, body {
 /* ================== NAVBAR GLOBAL ================== */
 .global-header {
   height: 70px;
-  background-color: #3b5998; 
+  /* background-color: #1e293b; */
+  background-color: #3b5998;
   color: white;
   padding: 0 25px;
   display: flex;
@@ -44,21 +45,26 @@ html, body {
   gap: 12px; 
 }
 .logo-icon { 
-  background-color: white; 
-  color: #3b5998; 
-  width: 42px; 
+background-color: transparent; /* <--- Mudei para transparente (antes era white) */
+  width: 42px; /* O tamanho do "quadradinho" onde a logo vai ficar */
   height: 42px; 
-  border-radius: 10px; 
   display: flex; 
   justify-content: center; 
   align-items: center; 
-  flex-shrink: 0; 
+  flex-shrink: 0;
 }
-.logo-icon svg { 
+/* .logo-icon svg { 
   width: 26px; 
   height: 26px; 
   fill: currentColor; 
-}
+} */
+ .logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Garante que a imagem não fique esticada/esmagada */
+  border-radius: 8px; /* Opcional: arredonda as pontinhas da sua imagem */
+ }
+ 
 .logo-text { display: flex; flex-direction: column; }
 .logo-text h1 { font-size: 1.3rem; margin: 0; line-height: 1.1; }
 .logo-text p { font-size: 0.8rem; opacity: 0.9; margin: 0; }

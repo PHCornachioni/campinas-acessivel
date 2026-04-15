@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { APIProvider, Map, AdvancedMarker, InfoWindow, useMapsLibrary, MapControl, ControlPosition, Pin } from '@vis.gl/react-google-maps';
 import { supabase } from './supabaseClient'; // A conexão real com seu banco!
 import './App.css';
+import logoCampinasAcessivel from './assets/logo-campinas-acessivel-05.png';
 
 // --- DICIONÁRIO DE CORES E ÍCONES ---
 const obterIconeMarcador = (tipo) => {
@@ -362,10 +363,7 @@ function PainelMapa() {
       <header className="global-header">
         <div className="logo-area">
           <div className="logo-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="12" cy="4" r="2" /> {/* <-- A cabeça chegou! */}
-              <path d="M19 13v-2c-1.54.02-3.09-.75-4.07-1.83l-1.29-1.43c-.17-.19-.38-.34-.61-.45-.01 0-.01-.01-.02-.01H13c-.35-.2-.75-.3-1.19-.26C10.76 7.11 10 8.04 10 9.09V15c0 1.1.9 2 2 2h5v5h2v-5.5c0-1.1-.9-2-2-2h-3v-3.45c1.29 1.07 3.25 1.94 5 1.95zm-6.17 5c-.41 1.16-1.52 2-2.83 2-1.66 0-3-1.34-3-3 0-1.31.84-2.41 2-2.83V12.1a5 5 0 105.9 5.9h-2.07z"/>
-            </svg>
+            <img src={logoCampinasAcessivel} alt="Logo Campinas Acessível" className="logo-img" />
           </div>
           <div className="logo-text">
             <h1>Campinas Acessível</h1>
