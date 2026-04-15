@@ -102,7 +102,19 @@ background-color: transparent; /* <--- Mudei para transparente (antes era white)
 .categorias-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
 .chip { padding: 6px 12px; background-color: #f0f2f5; border: none; border-radius: 20px; font-size: 0.8rem; cursor: pointer; }
 .chip.ativo { background-color: #3b5998; color: white; }
-.chip-limpar { border: none; background: #ffebee; color: #c62828; padding: 4px 8px; border-radius: 5px; font-size: 0.7rem; cursor: pointer; }
+.chip-limpar { 
+  border: none; 
+  background: #ffebee; 
+  color: #c62828; 
+  padding: 6px 12px;
+  border-radius: 5px; 
+  font-size: 0.75rem; 
+  cursor: pointer;
+  font-weight: bold;
+  white-space: nowrap; /* Impede o botão de quebrar em duas linhas */
+  flex-shrink: 0; /* Impede o navegador de tentar esmagar o botão */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Uma sombrinha leve para destacar */
+}
 
 /* ================== CARDS E BADGES ================== */
 .lista-locais { 

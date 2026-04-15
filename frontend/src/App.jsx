@@ -401,7 +401,7 @@ function PainelMapa() {
       <div className="main-content">
         <aside className={`sidebar ${menuAberto ? 'aberto' : ''}`}>
           <div className="filtros-container">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '5px 0 10px 0' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '5px 0 10px 0', width: '100%', gap: '10px' }}>
               <h4 className="filtro-label" style={{ margin: 0 }}>Filtros Ativos</h4>
               <button onClick={limparFiltros} className="chip-limpar">✕ Limpar</button>
             </div>
