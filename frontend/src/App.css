@@ -189,17 +189,22 @@ background-color: transparent; /* <--- Mudei para transparente (antes era white)
   .map-container { border-radius: 0; }
 
   .sidebar {
-    position: absolute;
+    position: fixed; 
+    top: 60px;       
     bottom: 0;
     left: 0;
     width: 100%;
-    height: calc(100vh - 60px);
+    height: auto;   
     transform: translateY(100%);
     transition: transform 0.3s ease-in-out;
     z-index: 150;
-    border-radius: 15px 15px 0 0; /* Arredonda só em cima */
+    border-radius: 15px 15px 0 0;
+    background-color: white; 
   }
-  .sidebar.aberto { transform: translateY(0); }
+
+  .sidebar.aberto { 
+    transform: translateY(0); 
+  }
 
   .btn-abrir-menu {
     display: block;
