@@ -50,7 +50,7 @@ function LocalCard({ local, onClick, isSelected }) {
   );
 }
 
-// --- NOVO: MODAL DE LOGIN E CADASTRO REAL ---
+// --- MODAL DE LOGIN E CADASTRO REAL ---
 function AuthModal({ setModalAberto }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
