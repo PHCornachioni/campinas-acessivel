@@ -237,6 +237,38 @@ function FormularioCadastro({ novoLocal, setNovoLocal, salvarLocal, setModalAber
   );
 }
 
+// --- NOVO: MODAL DE CRITÉRIOS DE ACESSIBILIDADE ---
+function ModalCriterios({ setModalCriteriosAberto }) {
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <h2 style={{ marginBottom: '15px' }}>Critérios de Classificação</h2>
+        
+        <div style={{ fontSize: '0.9rem', color: '#444', lineHeight: '1.6', marginBottom: '20px' }}>
+          <p><strong>♿ Acessibilidade Física:</strong> [Texto placeholder]</p>
+          <br/>
+          <p><strong>👁️ Acessibilidade Visual:</strong> [Texto placeholder]</p>
+          <br/>
+          <p><strong>🦻 Acessibilidade Auditiva:</strong> [Texto placeholder]</p>
+          <br/>
+          <p><strong>🧠 Acessibilidade Intelectual:</strong> [Texto placeholder]</p>
+        </div>
+
+        <div className="modal-actions">
+          <button 
+            type="button" 
+            className="btn-salvar" 
+            style={{ width: '100%' }}
+            onClick={() => setModalCriteriosAberto(false)}
+          >
+            Entendi
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // --- COMPONENTE PRINCIPAL DO MAPA ---
 function PainelMapa() {
   const [locais, setLocais] = useState([]);
@@ -251,6 +283,7 @@ function PainelMapa() {
   const [modoEdicao, setModoEdicao] = useState(false);
   const [authModalAberto, setAuthModalAberto] = useState(false);
   const [poiVisivel, setPoiVisivel] = useState(false); // Inicia como FALSO (Mapa Limpo)
+  const [modalCriteriosAberto, setModalCriteriosAberto] = useState(false); // modal criterios
 
   // O estado de segurança oficial do seu aplicativo
   const [session, setSession] = useState(null); 
@@ -427,7 +460,17 @@ function PainelMapa() {
             </div>
 
             <div className="filtro-grupo">
-              <h4 className="filtro-label">Acessibilidade</h4>
+              {/* O TÍTULO E O NOVO BOTÃO LADO A LADO */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                <h4 className="filtro-label" style={{ margin: 0 }}>Acessibilidade</h4>
+                <button 
+                  onClick={() => setModalCriteriosAberto(true)}
+                  style={{ background: 'none', border: 'none', color: '#3b5998', cursor: 'pointer', fontSize: '0.7rem', fontWeight: 'bold', textDecoration: 'underline' }}
+                >
+                  ℹ️ Como classificamos?
+                </button>
+              </div>
+              
               <div className="categorias-chips">
                 {['fisica', 'visual', 'auditiva', 'intelectual'].map(tipo => (
                   <button key={tipo} className={`chip ${filtrosAcesso[tipo] ? 'ativo' : ''}`} onClick={() => toggleAcesso(tipo)}>
@@ -447,7 +490,7 @@ function PainelMapa() {
 
         <main className="map-container">
           <Map 
-            // A MÁGICA DO REACT: Mudar a 'key' força o mapa a recarregar com o novo ID
+            // Mudar a 'key' força o mapa a recarregar com o novo ID
             key={poiVisivel ? 'mapa-normal' : 'mapa-limpo'} 
             center={posicaoMapa} 
             zoom={zoomMapa} 
@@ -525,7 +568,7 @@ function PainelMapa() {
             </div>
           </MapControl>
 
-          {/* O BOTÃO FLUTUANTE DE ABRIR/FECHAR MENU AGORA FICA AQUI */}
+          {/* O BOTÃO FLUTUANTE DE ABRIR/FECHAR*/}
           {!menuAberto ? (
             <button className="btn-abrir-menu" onClick={() => setMenuAberto(true)}>🔍 Filtros e Locais</button>
           ) : (
@@ -539,6 +582,7 @@ function PainelMapa() {
       {modalAberto && (
         <FormularioCadastro novoLocal={novoLocal} setNovoLocal={setNovoLocal} salvarLocal={salvarLocal} setModalAberto={setModalAberto} modoEdicao={modoEdicao} />
       )}
+      {modalCriteriosAberto && <ModalCriterios setModalCriteriosAberto={setModalCriteriosAberto} />}
     </div>
   );
 }
