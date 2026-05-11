@@ -120,8 +120,8 @@ return (
           </button>
         </form>
 
-        {/* Transformado em botão sem borda para 100% de Acessibilidade via Teclado */}
-        <button 
+        {/* CRIAR CONTA */}
+        {/* <button 
           type="button"
           onClick={() => setIsSignUp(!isSignUp)} 
           style={{ 
@@ -137,7 +137,7 @@ return (
           }}
         >
           {isSignUp ? 'Já tem uma conta? Clique aqui para entrar.' : 'Não tem conta? Crie uma agora para avaliar o sistema.'}
-        </button>
+        </button> */}
 
         <button 
           type="button" 
@@ -425,7 +425,7 @@ function PainelMapa() {
             </>
           ) : (
             <button style={{background: 'white', color: '#3b5998', border: 'none', padding: '8px 15px', borderRadius: '20px', fontWeight: 'bold', cursor: 'pointer'}} onClick={() => setAuthModalAberto(true)}>
-              Login / Cadastro
+              Login
             </button>
           )}
         </div>
