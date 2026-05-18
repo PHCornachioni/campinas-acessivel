@@ -239,28 +239,114 @@ function FormularioCadastro({ novoLocal, setNovoLocal, salvarLocal, setModalAber
 
 // --- NOVO: MODAL DE CRITÉRIOS DE ACESSIBILIDADE ---
 function ModalCriterios({ setModalCriteriosAberto }) {
+  // Agora começa nativamente na aba "Detalhes"
+  const [abaAtiva, setAbaAtiva] = useState('Detalhes'); 
+
+  const dadosCriterios = {
+    'Física': [
+      { titulo: 'Módulo de Referência (M.R.)', texto: 'Garantir que todos os espaços tenham pelo menos 0,80 m x 1,20 m para o posicionamento de uma cadeira de rodas em áreas de espera ou uso.' },
+      { titulo: 'Área de manobra', texto: 'Espaço livre para rotação de 360° (círculo com diâmetro de 1,50 m) em locais onde a mudança de direção é necessária.' },
+      { titulo: 'Elevadores', texto: 'Presença de elevadores funcionando para espaços que tenham escadas. Caso o espaço seja de um único andar e não possua escadas essa condição é marcada como respeitada.' },
+      { titulo: 'Rampas e desníveis', texto: 'Inclinação máxima de de 5%, com piso antiderrapante e guia de balizamento.' },
+      { titulo: 'Maçanetas tipo alavanca', texto: 'Instaladas entre 0,80 m e 1,10 m de altura, permitindo abertura com o dorso da mão ou sem necessidade de torção de pulso.' },
+      { titulo: 'Transferência em sanitários', texto: 'Espaço livre e barras de apoio fixas ou articuladas (diâmetro de 30 mm a 45 mm) junto ao vaso sanitário.' },
+      { titulo: 'Altura de comandos', texto: 'Interruptores, tomadas e alarmes situados em faixas de alcance manual confortáveis, entre 0,40 m e 1,20 m do piso.' }
+    ],
+    'Visual': [
+      { titulo: 'Piso tátil de alerta', texto: 'Textura de "bolinhas" instalada em locais de perigo, como início e fim de escadas, rampas e frente a portas de elevadores.' },
+      { titulo: 'Piso tátil direcional', texto: 'Textura de "linhas" que indica o caminho seguro em áreas amplas e sem referências de parede (linhas-guia).' },
+      { titulo: 'Contraste de luminância', texto: 'Diferença mínima de 30 pontos (LRV) entre mobiliários, sinalização e o plano de fundo, facilitando o acesso por quem tem baixa visão.' },
+      { titulo: 'Sinalização em Braille', texto: 'Informações táteis em corrimãos, placas de portas e botões de elevadores.' },
+      { titulo: 'Mapas táteis', texto: 'Dispositivos que permitem a compreensão da planta do local através do toque, posicionados na entrada dos edifícios.' },
+      { titulo: 'Proteção de mobiliários suspensos', texto: 'Elementos suspensos (como telefones ou vasos) entre 0,60 m e 2,10 m devem ser detectáveis por bengala longa.' },
+      { titulo: 'Sinais sonoros', texto: 'Alarmes de emergência e avisos de pavimentos em elevadores que complementem a informação visual.' }
+    ],
+    'Auditiva': [
+      { titulo: 'Sinalização de emergência', texto: 'Dispositivos luminosos do tipo flash que acompanham os alarmes sonoros em caso de incêndio ou sinistro presente em todas as áreas.' },
+      { titulo: 'Símbolo internacional de surdez', texto: 'Identificação nítida de postos de atendimento e equipamentos que possuem recursos para deficientes auditivos.' },
+      { titulo: 'Sistemas de amplificação', texto: 'Presença de sistemas assistivos de audição ou anéis de indução magnética em auditórios e guichês. Caso o espaço não possua auditórios ou guichês essa condição é marcada como respeitada.' },
+      { titulo: 'Atendimento em LIBRAS', texto: 'Disponibilidade de intérpretes ou sistemas de videochamada para conversas serem realizadas na Língua Brasileira de Sinais.' },
+      { titulo: 'Legendas e Janela de LIBRAS', texto: 'Em museus ou salas de vídeo, o conteúdo multimídia deve possuir tradução visual e legendagem. Bibliotecas devem ter parte do acervo em audiolivros ou livros impressos em Braile.' },
+      { titulo: 'Telefones com Teclado (TDD)', texto: 'Equipamentos que permitem a comunicação por texto para surdos.' },
+      { titulo: 'Informação Visual Redundante', texto: 'Painéis eletrônicos de senhas ou informativos que substituem ou complementam chamadas por voz.' }
+    ],
+    'Intelectual': [
+      { titulo: 'Linguagem simples', texto: 'Textos curtos, objetivos e de fácil leitura em placas de sinalização e mapas.' },
+      { titulo: 'Presença sala de regulação sensorial', texto: 'Espaço com pelo menos 20 (vinte) metros quadrados para a cada 100 (cem) metros de área construída para permitir a devida descompreensão de visitantes.' },
+      { titulo: 'Identificação por cores', texto: 'Uso de zoneamento por cores diferentes para identificar setores, pavimentos ou rotas de fluxo.' },
+      { titulo: 'Apoio de serviço assistido', texto: 'Funcionários treinados para oferecer suporte na orientação e uso de equipamentos, como máquinas de autoatendimento.' },
+      { titulo: 'Informação multimodal', texto: 'A mesma orientação deverá ser dada por mais de um canal (ex: voz, texto e imagem) para garantir que seja processada corretamente.' },
+      { titulo: 'Disponibilização de "Guias de Visitação Prévia"', texto: 'presença de mapas simplificados logo na entrada, que mostram claramente onde estão os pontos de interesse, as saídas e as áreas de apoio (como banheiros e a sala de regulação sensorial).' }
+    ]
+  };
+
+  // Nova lista com a ordem exata das abas
+  const abas = ['Detalhes', 'Física', 'Visual', 'Auditiva', 'Intelectual'];
+  // Ícone novo para os detalhes
+  const icones = { 'Detalhes': 'ℹ️', 'Física': '♿', 'Visual': '👁️', 'Auditiva': '🦻', 'Intelectual': '🧠' };
+
   return (
     <div className="modal-overlay">
-      <div className="modal-content">
-        <h2 style={{ marginBottom: '15px' }}>Critérios de Classificação</h2>
+      <div className="modal-content" style={{ maxWidth: '600px' }}> 
         
-        <div style={{ fontSize: '0.9rem', color: '#444', lineHeight: '1.6', marginBottom: '20px' }}>
-          <p><strong>♿ Acessibilidade Física:</strong> [Texto placeholder]</p>
-          <br/>
-          <p><strong>👁️ Acessibilidade Visual:</strong> [Texto placeholder]</p>
-          <br/>
-          <p><strong>🦻 Acessibilidade Auditiva:</strong> [Texto placeholder]</p>
-          <br/>
-          <p><strong>🧠 Acessibilidade Intelectual:</strong> [Texto placeholder]</p>
+        <h2 style={{ marginBottom: '15px' }}>Critérios de Avaliação</h2>
+        
+        {/* BOTÕES DAS ABAS */}
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '15px', paddingBottom: '5px' }}>
+          {abas.map(categoria => (
+            <button
+              key={categoria}
+              onClick={() => setAbaAtiva(categoria)}
+              style={{
+                padding: '8px 12px',
+                border: 'none',
+                borderRadius: '20px',
+                fontSize: '0.8rem',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                backgroundColor: abaAtiva === categoria ? '#3b5998' : 'transparent',
+                color: abaAtiva === categoria ? 'white' : '#475569',
+                border: abaAtiva === categoria ? '1px solid #3b5998' : '1px solid #cbd5e1', // Adiciona uma bordinha nas inativas para não sumirem no fundo branco
+                transition: '0.2s'
+              }}
+            >
+              {icones[categoria]} {categoria}
+            </button>
+          ))}
         </div>
 
-        <div className="modal-actions">
-          <button 
-            type="button" 
-            className="btn-salvar" 
-            style={{ width: '100%' }}
-            onClick={() => setModalCriteriosAberto(false)}
-          >
+        {/* CAIXA DE CONTEÚDO DINÂMICO COM O NOVO FUNDO #f8fafc */}
+        <div style={{ 
+          backgroundColor: '#f8fafc', // A cor de fundo que você gostou!
+          borderRadius: '8px', 
+          padding: '15px', // Espaçamento interno para o texto não colar nas bordas
+          maxHeight: '40vh', 
+          overflowY: 'auto', 
+          fontSize: '0.85rem', 
+          color: '#444', 
+          lineHeight: '1.6' 
+        }}>
+          
+          {/* Lógica: Se for 'Detalhes', mostra o parágrafo. Se não, mostra a lista. */}
+          {abaAtiva === 'Detalhes' ? (
+            <p style={{ margin: 0 }}>
+              Para o projeto “Campinas Acessível” utilizamos como base a <a href="https://drive.prefeitura.sp.gov.br/cidade/secretarias/upload/NBR9050_20.pdf" target="_blank" rel="noopener noreferrer" style={{ color: '#3b5998', fontWeight: 'bold' }}>Norma Regulatória 9050:2020</a> para criar um checklist que cada lugar deve cumprir para receber o selo de adequado para cada tipo de deficiência. Assim, para receber o selo de aprovado no Projeto “Campinas Acessível”, o local deve ter, pelo menos, 5 (cinco) dos 7 (sete) itens listados abaixo.
+            </p>
+          ) : (
+            <ul style={{ paddingLeft: '20px', margin: 0 }}>
+              {dadosCriterios[abaAtiva].map((item, index) => (
+                <li key={index} style={{ marginBottom: '10px' }}>
+                  <strong>{item.titulo}:</strong> {item.texto}
+                </li>
+              ))}
+            </ul>
+          )}
+
+        </div>
+
+        <div className="modal-actions" style={{ marginTop: '20px' }}>
+          <button type="button" className="btn-salvar" style={{ width: '100%' }} onClick={() => setModalCriteriosAberto(false)}>
             Entendi
           </button>
         </div>
